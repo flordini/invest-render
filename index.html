@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<title>Widget Investimentos</title>
+<style>
+  * { box-sizing: border-box; }
+  body {
+    font-family: -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+    background: #f2f2f2;
+    margin: 0;
+    padding: 24px;
+  }
+  .layout {
+    display: flex;
+    gap: 32px;
+    flex-wrap: wrap;
+    align-items: flex-start;
+  }
+  .panel {
+    background: #fff;
+    border-radius: 8px;
+    padding: 16px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.15);
+    width: 320px;
+  }
+  .panel h3 {
+    margin-top: 0;
+    font-size: 14px;
+  }
+  .panel label {
+    display: block;
+    font-size: 12px;
+    margin-top: 10px;
+    margin-bottom: 2px;
+    color: #333;
+  }
+  .panel input, .panel select {
+    width: 100%;
+    padding: 6px 8px;
+    font-size: 13px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+  }
+  .widget-wrap {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  /* ---- Widget base ---- */
+  .widget {
+    width: 340px;
+    border-radius: 12px;
+    padding: 20px 24px;
+    font-family: -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+  }
+  .widget .title {
+    font-size: 15px;
+    margin: 0 0 12px 0;
+    font-weight: 400;
+  }
+  .widget .subtitle {
+    font-size: 13px;
+    margin: 0 0 2px 0;
+    font-weight: 400;
+  }
+  .widget .subtitle2 {
+    font-size: 13px;
+    margin: 0 0 8px 0;
+    font-weight: 400;
+  }
+  .widget .valor-total {
+    font-size: 30px;
+    font-weight: 600;
+    margin: 0 0 12px 0;
+  }
+  .widget .rendimento-line {
+    font-size: 18px;
+    font-weight: 600;
+    margin: 0 0 4px 0;
+  }
+  .widget .periodo {
+    font-size: 12px;
+    margin: 0;
+  }
+  .widget .arrow {
+    margin-right: 2px;
+  }
+
+  /* ---- Estilo azul ---- */
+  .widget.blue {
+    background: #0a0e3d;
+    color: #ffffff;
+  }
+  .widget.blue .title { color: #ffffff; }
+  .widget.blue .subtitle,
+  .widget.blue .subtitle2 { color: #cfd2e8; }
+  .widget.blue .valor-total { color: #ffffff; }
+  .widget.blue .rendimento-line,
+  .widget.blue .arrow { color: #e8862f; }
+  .widget.blue .periodo { color: #e8862f; opacity: 0.85; }
+
+  /* ---- Estilo branco ---- */
+  .widget.white {
+    background: #ffffff;
+    color: #1a1a1a;
+    border: 1px solid #e6e6e6;
+  }
+  .widget.white .title { color: #1a1a1a; font-weight: 600; }
+  .widget.white .subtitle,
+  .widget.white .subtitle2 { color: #444; }
+  .widget.white .valor-total { color: #1a1a1a; }
+  .widget.white .rendimento-line,
+  .widget.white .arrow { color: #1c8a3e; }
+  .widget.white .periodo { color: #666; font-weight: 400; }
+</style>
+</head>
+<body>
+
+<div class="layout">
+
+  <div class="panel">
+    <h3>Parâmetros</h3>
+
+    <label for="cur_date">cur_date (saldo atualizado em)</label>
+    <input type="text" id="cur_date" value="07/07/2026">
+
+    <label for="valor_total">valor_total</label>
+    <input type="text" id="valor_total" value="590.046,21">
+
+    <label for="valor_rendimento">valor_rendimento</label>
+    <input type="text" id="valor_rendimento" value="37.798,79">
+
+    <label for="date_start">date_start</label>
+    <input type="text" id="date_start" value="02/01/2026">
+
+    <label for="date_end">date_end</label>
+    <input type="text" id="date_end" value="03/07/2026">
+  </div>
+
+  <div class="widget-wrap">
+    <div class="widget blue" id="widget-blue"></div>
+    <div class="widget white" id="widget-white"></div>
+  </div>
+
+</div>
+
+<script>
+function render() {
+  const cur_date = document.getElementById('cur_date').value;
+  const valor_total = document.getElementById('valor_total').value;
+  const valor_rendimento = document.getElementById('valor_rendimento').value;
+  const date_start = document.getElementById('date_start').value;
+  const date_end = document.getElementById('date_end').value;
+
+  const html = `
+    <p class="title">meus investimentos</p>
+    <p class="valor-total">R$ ${valor_total}</p>
+    <p class="subtitle">saldo atualizado em ${cur_date}</p>
+    <p class="subtitle2">CDB, Renda Fixa e Estruturados</p>
+    <p class="rendimento-line"><span class="arrow">&uarr;</span>R$ ${valor_rendimento}</p>
+    <p class="periodo">rendimento de ${date_start} a ${date_end}</p>
+  `;
+
+  document.getElementById('widget-blue').innerHTML = html;
+  document.getElementById('widget-white').innerHTML = html;
+}
+
+['cur_date','valor_total','valor_rendimento','date_start','date_end']
+  .forEach(id => document.getElementById(id).addEventListener('input', render));
+
+render();
+</script>
+
+</body>
+</html>
