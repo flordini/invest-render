@@ -129,11 +129,11 @@
     <label for="valor_total_soph">Soph — valor_total (blue)</label>
     <input type="text" id="valor_total_soph" value="590.046,21">
 
-    <label for="valor_rendimento_soph">Soph — valor_rendimento (blue)</label>
-    <input type="text" id="valor_rendimento_soph" value="37.798,79">
-
     <label for="valor_total_seb">Seb — valor_total (white)</label>
     <input type="text" id="valor_total_seb" value="590.046,21">
+
+    <label for="valor_rendimento_soph">Soph — valor_rendimento (blue)</label>
+    <input type="text" id="valor_rendimento_soph" value="37.798,79">
 
     <label for="valor_rendimento_seb">Seb — valor_rendimento (white)</label>
     <input type="text" id="valor_rendimento_seb" value="37.798,79">
@@ -198,6 +198,18 @@ function render() {
 
 ['cur_date','valor_total_soph','valor_rendimento_soph','valor_total_seb','valor_rendimento_seb','date_start','date_end']
   .forEach(id => $(id).addEventListener('input', render));
+
+// Multi-cell paste from a spreadsheet: fills the 4 valor_ fields in this order
+const VALOR_IDS = ['valor_total_soph', 'valor_total_seb', 'valor_rendimento_soph', 'valor_rendimento_seb'];
+
+VALOR_IDS.forEach(id => $(id).addEventListener('paste', e => {
+  const text = (e.clipboardData || window.clipboardData).getData('text').replace(/[\r\n]+$/, '');
+  const parts = text.split(/\t|\r?\n/).map(v => v.trim());
+  if (parts.length < 2) return; // single value: normal paste
+  e.preventDefault();
+  VALOR_IDS.forEach((fid, i) => { if (i < parts.length) $(fid).value = parts[i]; });
+  render();
+}));
 
 // Prefill on load only; fields stay editable
 const fmt = d => [
